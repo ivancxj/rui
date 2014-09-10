@@ -10,7 +10,7 @@ defaults: &defaults
   
   appid: "wxc03cada76c465d33"
   app_secret: "bcc611375a39d14a5e61e79b0375a394"
-  local_url: http://41216eed.ngrok.com
+  local_url: http://r.shiyimm.com
 
   every_day_gua: 2
 
