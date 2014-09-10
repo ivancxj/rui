@@ -22,7 +22,8 @@
 
     <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;" onclick="hint();">
 
-    <a href="<%= get_oauth_url(@mid) %>">
+
+    <a href="/my?openid=<%= @openid %>">
       <img src="<%= asset_path("2btn2.png") %>" border="0" >
     </a>
 
