@@ -16,6 +16,7 @@ class HomeController < ApplicationController
   end
   
   def index
+    @mid=params[:mid]
     
   end
 
