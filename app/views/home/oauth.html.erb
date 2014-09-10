@@ -20,7 +20,7 @@
 
     </div>
 
-    <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;" onclick="pyq();">
+    <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;" onclick="">
     <img src="<%= asset_path("2btn2.png") %>" border="0" onclick="">
 
   </center>
@@ -50,39 +50,10 @@
                   alert("分享获取抽奖次数或者只能等明天再来~");
 
                 }
-
             }
         });
-
     }
 
-    function pyq() {
-
-        WeixinJSBridge.invoke('shareTimeline', {
-            "img_url": "http://219.220.154.219/rhxc/images/logo.jpg",
-            "img_width": "640",
-            "img_height": "640",
-            "link": "http://219.220.154.219/rhxc/index.html",
-            "title": "瑞宏新城-璟庭 优享生活 分享精彩"
-        }, function (res) {
-            // 返回res.err_msg,取值
-            // share_timeline:cancel 用户取消
-            // share_timeline:fail　发送失败
-            // share_timeline:ok 发送成功
-            WeixinJSBridge.log(res.err_msg);
-        });
-
-    }
-
-
-    //图片地址
-    var share_imgurl = "http://219.220.154.219/rhxc/images/logo.jpg";
-    //分享地址
-    var link = "http://219.220.154.219/rhxc/index.html";
-    //分享内容
-    var content = "瑞宏新城-璟庭 优享生活 分享精彩 分享";
-    //分享标题
-    var title = "瑞宏新城-璟庭 优享生活 分享精彩 分享";
 
 </script>
 
@@ -146,6 +117,8 @@
 //        WeixinApi.closeWindow();
 //    });
 
+    WeixinApi.showOptionMenu();
+    WeixinApi.showToolbar();
     // 需要分享的内容，请放到ready里
     WeixinApi.ready(function(Api) {
 
@@ -202,13 +175,7 @@
         // 有可能用户是直接用微信“扫一扫”打开的，这个情况下，optionMenu、toolbar都是off状态
         // 为了方便用户测试，我先来trigger show一下
         // optionMenu
-        var elOptionMenu = document.getElementById('optionMenu');
-        elOptionMenu.click(); // 先隐藏
-        elOptionMenu.click(); // 再显示
-        // toolbar
-        var elToolbar = document.getElementById('toolbar');
-        elToolbar.click(); // 先隐藏
-        elToolbar.click(); // 再显示
+
     });
 
 </script>
