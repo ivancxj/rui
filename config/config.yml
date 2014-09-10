@@ -1,0 +1,24 @@
+defaults: &defaults
+  email:
+    delivery_method: :smtp
+    server: smtp.exmail.qq.com
+    port: 25
+    domain: qq.com
+    authentication: :login
+    sender: "no-reply@shiyimm.com"
+    password: "shiyimm123"
+  
+  appid: "wxc03cada76c465d33"
+  app_secret: "bcc611375a39d14a5e61e79b0375a394"
+  local_url: http://41216eed.ngrok.com
+
+  every_day_gua: 2
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

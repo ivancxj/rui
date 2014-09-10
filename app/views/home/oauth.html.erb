@@ -1,0 +1,82 @@
+<body style="margin:0px;background-color:#6ecbb9;text-align:center;">
+
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tbody>
+  <tr>
+    <td align="center" valign="top">
+      <img src="<%= asset_path("2bg.jpg") %>" border="0">
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div id="btn" style="width:100%;height:490px;position:absolute;top:437px;margin-left:auto;margin-right:auto;z-index:10;">
+  <center>
+    <img id="gg" src="<%= asset_path("2gg.png") %>" border="0" style="margin-bottom:12px;cursor:hand;" onclick="cj();">
+
+    <div style="width:365px;height:48px;background-color:#5fbaa9;text-align:center;font-size:22px;color:#ffffff;margin-bottom:12px;line-height:48px;">
+
+      <span id="count" datasrc="<%= @openid %>"><%= "剩余#{@gua_count}次机会" %></span>
+
+    </div>
+
+    <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;" onclick="pyq();">
+    <img src="<%= asset_path("2btn2.png") %>" border="0" onclick="">
+
+  </center>
+</div>
+
+<!--/div-->
+
+
+<script type="text/javascript">
+
+    function cj() {
+
+        $.ajax({
+            url: '/gua',
+            type: 'post',
+            dataType: 'json',
+            data: {openid: <%= @openid%>},
+            success: function(data){
+                if(data.gua_count >= 0){
+                    $("#count").html('剩余'+data.gua_count+'次机会');
+                    //        var g = $("#gg");
+                    var g = document.getElementById("gg");
+                    g.src = "images/m"+data.award+".png";
+                }
+
+            }
+        });
+
+    }
+
+    function pyq() {
+
+        WeixinJSBridge.invoke('shareTimeline', {
+            "img_url": "http://219.220.154.219/rhxc/images/logo.jpg",
+            "img_width": "640",
+            "img_height": "640",
+            "link": "http://219.220.154.219/rhxc/index.html",
+            "title": "瑞宏新城-璟庭 优享生活 分享精彩"
+        }, function (res) {
+            // 返回res.err_msg,取值
+            // share_timeline:cancel 用户取消
+            // share_timeline:fail　发送失败
+            // share_timeline:ok 发送成功
+            WeixinJSBridge.log(res.err_msg);
+        });
+
+    }
+
+
+    //图片地址
+    var share_imgurl = "http://219.220.154.219/rhxc/images/logo.jpg";
+    //分享地址
+    var link = "http://219.220.154.219/rhxc/index.html";
+    //分享内容
+    var content = "瑞宏新城-璟庭 优享生活 分享精彩 分享";
+    //分享标题
+    var title = "瑞宏新城-璟庭 优享生活 分享精彩 分享";
+
+</script>
