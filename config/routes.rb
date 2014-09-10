@@ -6,6 +6,17 @@ Rails.application.routes.draw do
   post 'gua', :to => 'home#gua'
 
   get 'my', :to => 'home#my'
+
+  # 助政好友
   get 'friend', :to => 'home#friend'
+
+  # 活动介绍
+  get 'jieshao', :to => 'home#jieshao'
+
+  # 获奖名单
+  get 'mingdan', :to => 'home#mingdan'
+
+  # 点击分享提示
+  get 'share_hint', :to => 'home#share_hint'
 
 end

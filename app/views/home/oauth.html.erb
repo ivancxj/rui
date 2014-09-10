@@ -1,13 +1,15 @@
 <body style="margin:0px;background-color:#6ecbb9;text-align:center;">
 
 <table width="100%" cellpadding="0" cellspacing="0">
-  <tbody>
-  <tr>
-    <td align="center" valign="top">
-      <img src="<%= asset_path("2bg.jpg") %>" border="0">
-    </td>
-  </tr>
-  </tbody>
+  <tr><td align="center" valign="top">
+    <img src="<%= asset_path("2bg.jpg") %>" border="0" usemap="#map1"/>
+    <map name="map1">
+      <area href="/friend?openid=<%= @openid %>" coords="24,348,162,379" shape="rect">
+      <area href="/jieshao" coords="180,348,318,379" shape="rect">
+      <area href="javascript:window.location.href='http://test.gootinfo.com/rhw1/Newlist.html?from=groupmessage&isappinstalled=0&from=groupmessage&isappinstalled=0'" coords="337,348,466,379" shape="rect">
+      <area href="/mingdan" coords="479,348,615,379" shape="rect">
+    </map>
+  </td></tr>
 </table>
 
 <div id="btn" style="width:100%;height:490px;position:absolute;top:437px;margin-left:auto;margin-right:auto;z-index:10;">
@@ -20,20 +22,13 @@
 
     </div>
 
-    <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;" onclick="hint();">
-
+    <a href="/share_hint">
+      <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;">
+    </a>
 
     <a href="/my?openid=<%= @openid %>">
       <img src="<%= asset_path("2btn2.png") %>" border="0" >
     </a>
-
-    <div style="width:365px;height:48px;background-color:#5fbaa9;text-align:center;font-size:22px;color:#ffffff;margin-bottom:12px;line-height:48px;">
-
-      <a href="/friend?openid=<%= @openid %>">
-        助阵好友
-      </a>
-
-    </div>
 
 
 

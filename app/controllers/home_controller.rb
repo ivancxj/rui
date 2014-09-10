@@ -209,14 +209,21 @@ class HomeController < ApplicationController
   def friend
 
     openid = params[:openid]
-    u = User.where(openid: openid).first
-
-    @friends = []
-    if u.present?
-      @friends = Friend.includes(:friend).where(user_id: u.id).to_a
-
+    @count = 0
+    if openid.present?
+      u = User.where(openid: openid).first
+      @count = u.hy_count if u.present?
     end
 
+  end
+
+  # 活动介绍
+  def jieshao
+
+  end
+
+  # 获奖名单
+  def mingdan
 
   end
 
