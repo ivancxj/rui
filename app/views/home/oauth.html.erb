@@ -20,16 +20,28 @@
 
     </div>
 
-    <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;" onclick="">
-    <img src="<%= asset_path("2btn2.png") %>" border="0" onclick="">
+    <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;" onclick="hint();">
+
+    <a href="<%= get_oauth_url(@mid) %>">
+      <img src="<%= asset_path("2btn2.png") %>" border="0" >
+    </a>
+
+    <a href="<%= get_friend_url(@openid) %>">
+      助阵好友
+    </a>
+
 
   </center>
 </div>
-
+</body>
 <!--/div-->
 
 
 <script type="text/javascript">
+
+    function hint(){
+        alert('请在右上角点击分享');
+    }
 
     function cj() {
 
@@ -60,7 +72,8 @@
 <script type="text/javascript">
 
     // 给按钮增加click事件：请不要太纠结这个写法，demo而已
-
+    WeixinApi.showToolbar();
+    WeixinApi.showOptionMenu();
 
     // 需要分享的内容，请放到ready里
     WeixinApi.ready(function(Api) {
@@ -80,7 +93,7 @@
             // 分享操作开始之前
             ready : function() {
                 // 你可以在这里对分享的数据进行重组
-                alert("准备分享");
+//                alert("准备分享");
             },
             // 分享被用户自动取消
             cancel : function(resp) {

@@ -5,4 +5,7 @@ Rails.application.routes.draw do
   get 'oauth', :to => 'home#oauth'
   post 'gua', :to => 'home#gua'
 
+  get 'my', :to => 'home#my'
+  get 'friend', :to => 'home#friend'
+
 end

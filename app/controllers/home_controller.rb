@@ -74,7 +74,6 @@ class HomeController < ApplicationController
 
       end
 
-
     end
 
 
@@ -180,6 +179,44 @@ class HomeController < ApplicationController
     end
 
     # render json: {:gua_count => 6, :award => 3}
+
+  end
+
+  def my
+    openid = params[:openid]
+    @count = 0
+
+    @award_1 = 0
+    @award_2 = 0
+    @award_3 = 0
+    @award_4 = 0
+    @award_5 = 0
+    @award_6 = 0
+    if openid
+      u = User.where(openid: openid).first
+      @count = u.hy_count if u.present?
+      @award_1 = u.award_1
+      @award_2 = u.award_2
+      @award_3 = u.award_3
+      @award_4 = u.award_4
+      @award_5 = u.award_5
+      @award_6 = u.award_6
+
+    end
+  end
+
+  # 助阵好友列表
+  def friend
+
+    openid = params[:openid]
+    u = User.where(openid: openid).first
+
+    @friends = []
+    if u.present?
+      @friends = Friend.includes(:friend).where(user_id: u.id).to_a
+
+    end
+
 
   end
 
