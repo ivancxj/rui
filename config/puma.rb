@@ -27,7 +27,7 @@
 #
 # The default is “development”.
 #
-environment 'production'
+# environment 'production'
 
 # Daemonize the server into the background. Highly suggest that
 # this be combined with “pidfile” and “stdout_redirect”.
@@ -79,7 +79,7 @@ threads 0, 16
 #
 # The default is “tcp://0.0.0.0:9292”.
 #
-# bind 'tcp://0.0.0.0:5009'
+bind 'tcp://0.0.0.0:5009'
 # bind 'unix:///var/run/puma.sock'
 # bind 'unix:///var/run/puma.sock?umask=0777'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
