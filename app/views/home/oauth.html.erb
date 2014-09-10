@@ -37,9 +37,10 @@
             url: '/gua',
             type: 'post',
             dataType: 'json',
-            data: {openid: <%= @openid%>},
+            data: {openid: "<%= @openid%>"},
+//            data: {openid: 'ozmMMt8Irb8htU_jlRVX3Ekkzov8'},
+
             success: function(data){
-                alert(data.gua_count);
                 if(data.gua_count >= 0){
                     $("#count").html('剩余'+data.gua_count+'次机会');
                     //        var g = $("#gg");

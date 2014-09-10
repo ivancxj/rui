@@ -116,8 +116,8 @@ class HomeController < ApplicationController
     @gua_count = user.today_gua_count
     @user_id = user.id
 
-    # @openid = '111'
-    # @gua_count = 3
+    # @openid = 'ozmMMt8Irb8htU_jlRVX3Ekkzov8'
+    # @gua_count = 2
   end
 
 
