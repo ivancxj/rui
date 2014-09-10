@@ -173,11 +173,12 @@ class HomeController < ApplicationController
         end
       end
 
-      # @today_gua_count = user.today_gua_count
       render json: {:gua_count => user.today_gua_count, :award => r}
     else
       render json: {:gua_count => -1}
     end
+
+    # render json: {:gua_count => 6, :award => 3}
 
   end
 

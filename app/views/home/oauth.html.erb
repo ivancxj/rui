@@ -16,7 +16,7 @@
 
     <div style="width:365px;height:48px;background-color:#5fbaa9;text-align:center;font-size:22px;color:#ffffff;margin-bottom:12px;line-height:48px;">
 
-      <span id="count" datasrc="<%= @openid %>"><%= "剩余#{@gua_count}次机会" %></span>
+      <span id="count" ><%= "剩余#{@gua_count}次机会" %></span>
 
     </div>
 
@@ -33,6 +33,7 @@
 
     function cj() {
 
+        alert('11');
         $.ajax({
             url: '/gua',
             type: 'post',
