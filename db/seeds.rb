@@ -12,14 +12,14 @@ Award.create(award_type: 3, name: '料理机', count: 2)
 Award.create(award_type: 4, name: '电影票', count: 20)
 
 
-# opt={}
-# opt[:access_token] = 'access_token'
-# opt[:refresh_token] = 'refresh_token'
-# opt[:openid] = 'ozmMMt8Irb8htU_jlRVX3Ekkzov8'
-# opt[:nickname] = 'nickname'
-# opt[:sex] = 1
-#
-# opt[:today_gua_count] = 1
-# opt[:last_get_time] = Time.now
-# user = User.new(opt)
-# user.save
+opt={}
+opt[:access_token] = 'access_token'
+opt[:refresh_token] = 'refresh_token'
+opt[:openid] = 'ozmMMt8Irb8htU_jlRVX3Ekkzov8'
+opt[:nickname] = 'nickname'
+opt[:sex] = 1
+
+opt[:today_gua_count] = 10
+opt[:last_get_time] = Time.now
+user = User.new(opt)
+user.save
