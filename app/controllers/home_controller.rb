@@ -37,7 +37,7 @@ class HomeController < ApplicationController
     if user.present?
 
       if user.last_get_time < Time.now.beginning_of_day
-        user.today_gua_count = Setting.every_day_gua
+        user.today_gua_count = user.today_gua_count + Setting.every_day_gua
         user.last_get_time = Time.now
         user.save
       end
