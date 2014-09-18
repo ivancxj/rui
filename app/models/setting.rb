@@ -30,5 +30,9 @@ class Setting < Settingslogic
     Redis::Objects.redis.del(CACHE_PREFIX + key)
   end
 
+  def share_url(openid)
+    Setting.local_url + "?mid=" + openid;
+  end
+
 
 end
