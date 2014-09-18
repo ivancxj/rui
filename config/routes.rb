@@ -21,4 +21,6 @@ Rails.application.routes.draw do
   # 点击分享提示
   get 'share_hint', :to => 'home#share_hint'
 
+  get 'demo', :to => 'home#demo'
+
 end
