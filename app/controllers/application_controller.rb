@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   def normal_rand
     org = [1,2,3,4,5,6]
-    tmp_array = [1,2,3,4,5,6,1,1]
+    tmp_array = [1,2,3,4,5,6,1,1,1,1]
     tmp_r = rand(1..tmp_array.length)
     tmp_r = tmp_array[tmp_r-1]
     org[tmp_r-1]
