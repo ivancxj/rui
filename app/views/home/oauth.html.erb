@@ -361,6 +361,7 @@
 
 <script type="text/javascript">
 
+    var local_url = "<%= Setting.local_url%>" + "?mid=" + "<%= @openid%>";
     // 给按钮增加click事件：请不要太纠结这个写法，demo而已
     WeixinApi.showToolbar();
     WeixinApi.showOptionMenu();
@@ -368,15 +369,17 @@
     // 需要分享的内容，请放到ready里
     WeixinApi.ready(function (Api) {
 
+
         // 微信分享的数据
         var wxData = {
             "appId": "", // 服务号可以填写appId
             "imgUrl": 'http://www.baidufe.com/fe/blog/static/img/weixin-qrcode-2.jpg',
 
-            "link": "<%= Setting.local_url%>?mid=<%= @openid%>",
+            "link": local_url,
             "desc": '瑞宏新城-璟庭 优享生活 分享精彩 分享',
             "title": "瑞宏新城-璟庭 优享生活 分享精彩 分享"
         };
+
 
         // 分享的回调
         var wxCallbacks = {
