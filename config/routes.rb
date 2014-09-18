@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   get 'oauth', :to => 'home#oauth'
   post 'gua', :to => 'home#gua'
+  post 'go_gua', :to => 'home#go_gua'
+  post 'duihuan', :to => 'home#duihuan'
 
   get 'my', :to => 'home#my'
 

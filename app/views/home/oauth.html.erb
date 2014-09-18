@@ -1,70 +1,359 @@
-<body style="margin:0px;background-color:#6ecbb9;text-align:center;">
+<style type="text/css">
+    .page {
+        position: relative;
+        width: 100%;
+        max-width: 640px;
+        min-width: 320px;
+    }
 
-<table width="100%" cellpadding="0" cellspacing="0">
-  <tr><td align="center" valign="top">
-    <img src="<%= asset_path("2bg.jpg") %>" border="0" usemap="#map1"/>
-    <map name="map1">
-      <area href="/friend?openid=<%= @openid %>" coords="24,348,162,379" shape="rect">
-      <area href="/jieshao" coords="180,348,318,379" shape="rect">
-      <area href="javascript:window.location.href='http://test.gootinfo.com/rhw1/Newlist.html?from=groupmessage&isappinstalled=0&from=groupmessage&isappinstalled=0'" coords="337,348,466,379" shape="rect">
-      <area href="/mingdan" coords="479,348,615,379" shape="rect">
-    </map>
-  </td></tr>
-</table>
+    .bgImg {
+        display: inline-block;
+        max-width: 100%;
+        width: 100%;
+    }
 
-<div id="btn" style="width:100%;height:490px;position:absolute;top:437px;margin-left:auto;margin-right:auto;z-index:10;">
-  <center>
-    <img id="gg" src="<%= asset_path("2gg.png") %>" border="0" style="margin-bottom:12px;cursor:hand;" onclick="cj();">
+    .btn {
+        position: absolute;
+        top: 38%;
+        left: 50%;
+        width: 60%;
+        margin-left: -30%;
+    }
 
-    <div style="width:365px;height:48px;background-color:#5fbaa9;text-align:center;font-size:22px;color:#ffffff;margin-bottom:12px;line-height:48px;">
+    .mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1d1c1c;
+        opacity: 0.3;
+        z-index: 100;
+    }
 
-      <span id="count" ><%= "剩余#{@gua_count}次机会" %></span>
+    .contact {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        width: 60%;
+        margin-left: -30%;
+        background: none repeat scroll 0 0 #fff;
+        height: 38%;
+        z-index: 200;
+        font-size: 29px;
+    }
 
+    @media screen and (max-width: 480px) {
+        .contact {
+            font-size: 15px;
+        }
+    }
+
+    .contactTop {
+        padding: 5%;
+        background-color: #d0a972;
+    }
+
+    .contactTop span {
+        display: block;
+        text-align: left;
+        font-weight: bold;
+        color: #fff;
+        line-height: 125%;
+    }
+
+    .contactInfo {
+        margin-top: 15px;
+        height: 45%;
+    }
+
+    li {
+        display: block;
+        width: 100%;
+        height: 26%;
+        font-weight: bold;
+        margin-bottom: 4%;
+    }
+
+    li span {
+        display: inline-block;
+        width: 28%;
+        text-align: center;
+    }
+
+    input[type='text'] {
+        display: inline-block;
+        height: 100%;
+        width: 65%;
+        border: none;
+        background-color: #dcdcdc;
+    }
+
+    input[type='text']:focus {
+        outline: none;
+    }
+
+    .confirmBtn {
+        margin-top: 15px;
+        width: 40%;
+        position: absolute;
+        top: 75%;
+        left: 50%;
+        margin-left: -20%;
+    }
+
+    .displayNone {
+        display: none;
+    }
+
+    .element4, .element5, .element6 {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        width: 70%;
+        margin-left: -35%;
+        background: #fff;
+        z-index: 200;
+    }
+
+    .element4 img, .element5 img, .element6 img {
+        width: 100%;
+    }
+
+    img.confirmBtn1 {
+        width: 30%;
+        position: absolute;
+        top: 75%;
+        left: 13%;
+    }
+
+    img.confirmBtn2 {
+        width: 30%;
+        position: absolute;
+        top: 75%;
+        left: 56%;
+    }
+
+    img.confirmBtn3 {
+        width: 30%;
+        position: absolute;
+        margin-left: -15%;
+        top: 75%;
+        left: 50%;
+    }
+
+    .canvas {
+        left: 0;
+        position: absolute;
+        top: 0;
+        z-index: 99;
+    }
+</style>
+
+
+<body style="margin:0;background-color:#6ecbb9;">
+
+<div id="page" class="page">
+  <div id="mask" class="mask displayNone"></div>
+
+  <img class="bgImg" src="<%= asset_path("2bg.jpg") %>" border="0" usemap="#map1">
+  <map name="map1">
+    <area id="areaBtn1" href="/friend?openid=<%= @openid %>" coords="24,348,162,379" shape="rect">
+    <area id="areaBtn2" href="/jieshao" coords="180,348,318,379" shape="rect">
+    <area id="areaBtn3" href="javascript:window.location.href='http://test.gootinfo.com/rhw1/Newlist.html?from=groupmessage&isappinstalled=0&from=groupmessage&isappinstalled=0'" coords="337,348,466,379" shape="rect">
+    <area id="areaBtn4" href="/mingdan" coords="479,348,615,379" shape="rect">
+  </map>
+
+  <div id="btn" class="btn">
+    <div id="page1">
+      <canvas class="canvas" id="canvas" width="384" height="204"></canvas>
+    </div>
+    <img id="gg" src="<%= asset_path("m1.png") %>" style="width: 98%; margin-bottom: 12px;padding: 1%">
+
+    <div style="width:100%;height:48px;background-color:#5fbaa9;text-align:center;font-size:22px;color:#ffffff;margin-bottom:12px;line-height:48px;">
+      剩余<span id="exchangeCount"><%= @gua_count %></span>次机会
     </div>
 
+    <!--<img src="images/2btn1.png" border="0" style="display:block;margin-bottom:12px;" onclick="pyq();">-->
     <a href="/share_hint">
-      <img src="<%= asset_path("2btn1.png") %>" border="0" style="display:block;margin-bottom:12px;">
+      <img src="<%= asset_path("2btn1.png") %>" style="width:100%;display:block;margin-bottom:12px;">
     </a>
 
     <a href="/my?openid=<%= @openid %>">
-      <img src="<%= asset_path("2btn2.png") %>" border="0" >
+      <img src="<%= asset_path("2btn2.png") %>" style="width:100%;">
     </a>
+  </div>
 
-
-
-  </center>
+  <div id="element4" class="element4 displayNone">
+    <img src="<%= asset_path("6btn3.png") %>" border="0">
+    <img class="confirmBtn1" src="<%= asset_path("6btn1.png") %>" border="0" onclick="exchange(4)">
+    <img class="confirmBtn2" src="<%= asset_path("6btn2.png") %>" border="0" onclick="userContinue()">
+  </div>
+  <div id="element5" class="element5 displayNone">
+    <img src="<%= asset_path("7btn.png") %>" border="0">
+    <img class="confirmBtn1" src="<%= asset_path("6btn1.png") %>" border="0" onclick="exchange(5)">
+    <img class="confirmBtn2" src="<%= asset_path("6btn2.png") %>" border="0" onclick="userContinue()">
+  </div>
+  <div id="element6" class="element6 displayNone">
+    <img src="<%= asset_path("8btn.png") %>" border="0">
+    <img class="confirmBtn3" src="<%= asset_path("6btn1.png") %>" border="0" onclick="exchange(6)">
+  </div>
+  <div id="contact" class="contact displayNone">
+    <div class="contactTop">
+      <span>请填写您的联系方式，以便我们通知您尽快领奖。</span>
+    </div>
+    <div class="contactInfo">
+      <li><span>微信名</span><input type="text" id="contact_weixin"></li>
+      <li><span>姓名</span><input type="text" id="contact_name"></li>
+      <li><span>手机</span><input type="text" id="contact_mobile"></li>
+    </div>
+    <img class="confirmBtn" src="<%= asset_path("confirmBtn.png") %>" border="0" onclick="duihuan();">
+  </div>
 </div>
+
+
 </body>
 <!--/div-->
 
 
 <script type="text/javascript">
 
-    function hint(){
-        alert('请在右上角点击分享');
+    function adaptScreen() {
+        var _width = document.getElementById('page').offsetWidth;
+        var rW = _width / 640;
+        var areaLendth = document.getElementsByTagName('area').length;
+        for (var k = 0; k < areaLendth; k++) {
+            var coords = document.getElementsByTagName('area')[k].getAttribute('coords');
+            var arrCoords = coords.split(',');
+            for (var i = 0; i < arrCoords.length; i++) {
+                arrCoords[i] = i % 2 == 0 ? parseInt(arrCoords[i] * rW) : parseInt(arrCoords[i] * rW);
+            }
+            document.getElementsByTagName('area')[k].setAttribute('coords', arrCoords.join(','));
+        }
     }
 
-    function cj() {
+    adaptScreen();
 
+    //mockup data
+    var elementCount = 3;
+
+    function checkElementCount() {
+        if (elementCount > 3) {
+            document.getElementById('mask').style.display = 'block';
+
+            switch (elementCount) {
+                case 4:
+                    document.getElementById('element4').style.display = 'block';
+                    break;
+                case 5:
+                    document.getElementById('element5').style.display = 'block';
+                    break;
+                case 6:
+                    document.getElementById('element6').style.display = 'block';
+                    break;
+            }
+        }
+    }
+
+    function userContinue() {
+        document.getElementById('mask').style.display = 'none';
+        document.getElementById('element4').style.display = 'none';
+        document.getElementById('element5').style.display = 'none';
+        document.getElementById('element6').style.display = 'none';
+
+// 通知后台,该用户继续玩
         $.ajax({
-            url: '/gua',
+            url: '/go_gua',
             type: 'post',
             dataType: 'json',
-            data: {openid: "<%= @openid%>"},
-//            data: {openid: 'ozmMMt8Irb8htU_jlRVX3Ekkzov8'},
+            data: {openid: "<%= @openid%>", element_count: elementCount},
 
-            success: function(data){
-                if(data.gua_count >= 0) {
-                    $("#count").html('剩余' + data.gua_count + '次机会');
-                    //        var g = $("#gg");
-                    var g = document.getElementById("gg");
-                    g.src = "images/m" + data.award + ".png";
-                }else {
-                  alert("分享获取抽奖次数或者只能等明天再来~");
-
-                }
+            success: function (data) {
             }
         });
+
+    }
+
+    function duihuan() {
+
+        var contact_weixin = $('#contact_weixin').val();
+        if (contact_weixin == '') {
+            alert('微信名不能为空');
+            return false;
+        }
+
+        var contact_name = $('#contact_name').val();
+        if (contact_name == '') {
+            alert('姓名不能为空');
+            return false;
+        }
+
+        var contact_mobile = $('#contact_mobile').val();
+        if (contact_mobile == '') {
+            alert('手机号不能为空');
+            return false;
+        }
+
+        $.ajax({
+            url: '/duihuan',
+            type: 'post',
+            dataType: 'json',
+            data: {is_hy: false, openid: "<%= @openid%>", element_count: elementCount,
+                weixin_name: contact_weixin, name: contact_name, mobile: contact_mobile},
+
+            success: function (data) {
+
+                document.getElementById('contact').style.display = 'none';
+                document.getElementById('mask').style.display = 'none';
+                document.getElementById('element4').style.display = 'none';
+                document.getElementById('element5').style.display = 'none';
+                document.getElementById('element6').style.display = 'none';
+                if (data.status != 1) {
+                    alert(data.msg);
+                }
+
+            }
+        });
+
+
+    }
+
+    function exchange(type) {
+
+        document.getElementById('element' + type).style.display = 'none';
+        document.getElementById('contact').style.display = 'block';
+    }
+
+    var gua_count = <%= @gua_count %>
+
+    function cj() {
+       if (gua_count > 0) {
+           $.ajax({
+               url: '/gua',
+               type: 'post',
+               dataType: 'json',
+               data: {openid: "<%= @openid%>"},
+
+               success: function (data) {
+                   gua_count = data.gua_count;
+                   if (data.gua_count >= 0) {
+                       elementCount = data.element_count;
+                       exchangeCount = data.gua_count;
+//                       $("#exchangeCount").innerHTML = '' + data.gua_count;
+                       var g = document.getElementById("gg");
+                       g.src = "images/m" + data.award + ".png";
+                   } else {
+                       exchangeCount = 0;
+                       document.getElementById("exchangeCount").innerHTML =  '0';
+                       alert("分享获取抽奖次数或者只能等明天再来~");
+                   }
+               }
+           });
+       } else {
+           $("#exchangeCount").innerHTML = '0';
+       }
+
+
     }
 
 
@@ -77,42 +366,42 @@
     WeixinApi.showOptionMenu();
 
     // 需要分享的内容，请放到ready里
-    WeixinApi.ready(function(Api) {
+    WeixinApi.ready(function (Api) {
 
         // 微信分享的数据
         var wxData = {
             "appId": "", // 服务号可以填写appId
-            "imgUrl" : 'http://www.baidufe.com/fe/blog/static/img/weixin-qrcode-2.jpg',
+            "imgUrl": 'http://www.baidufe.com/fe/blog/static/img/weixin-qrcode-2.jpg',
 
-            "link" : "<%= Setting.local_url%>"+"?mid="+"<%= @user_id%>",
-            "desc" : '瑞宏新城-璟庭 优享生活 分享精彩 分享',
-            "title" : "瑞宏新城-璟庭 优享生活 分享精彩 分享"
+            "link": "<%= Setting.local_url%>" + "?mid=" + "<%= @openid%>",
+            "desc": '瑞宏新城-璟庭 优享生活 分享精彩 分享',
+            "title": "瑞宏新城-璟庭 优享生活 分享精彩 分享"
         };
 
         // 分享的回调
         var wxCallbacks = {
             // 分享操作开始之前
-            ready : function() {
+            ready: function () {
                 // 你可以在这里对分享的数据进行重组
 //                alert("准备分享");
             },
             // 分享被用户自动取消
-            cancel : function(resp) {
+            cancel: function (resp) {
                 // 你可以在你的页面上给用户一个小Tip，为什么要取消呢？
 //                alert("分享被取消，msg=" + resp.err_msg);
             },
             // 分享失败了
-            fail : function(resp) {
+            fail: function (resp) {
                 // 分享失败了，是不是可以告诉用户：不要紧，可能是网络问题，一会儿再试试？
 //                alert("分享失败，msg=" + resp.err_msg);
             },
             // 分享成功
-            confirm : function(resp) {
+            confirm: function (resp) {
                 // 分享成功了，我们是不是可以做一些分享统计呢？
 //                alert("分享成功，msg=" + resp.err_msg);
             },
             // 整个分享过程结束
-            all : function(resp,shareTo) {
+            all: function (resp, shareTo) {
                 // 如果你做的是一个鼓励用户进行分享的产品，在这里是不是可以给用户一些反馈了？
 //                alert("分享" + (shareTo ? "到" + shareTo : "") + "结束，msg=" + resp.err_msg);
             }
@@ -128,7 +417,7 @@
         Api.shareToWeibo(wxData, wxCallbacks);
 
         // iOS上，可以直接调用这个API进行分享，一句话搞定
-        Api.generalShare(wxData,wxCallbacks);
+        Api.generalShare(wxData, wxCallbacks);
 
         // 有可能用户是直接用微信“扫一扫”打开的，这个情况下，optionMenu、toolbar都是off状态
         // 为了方便用户测试，我先来trigger show一下
@@ -143,4 +432,6 @@
     });
 
 </script>
+
+<script src="js/shade.js" type="text/javascript"></script>
 

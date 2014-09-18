@@ -1,11 +1,10 @@
 #encoding: utf-8
-# 个人每天领奖记录
+# 个人每天刮卡记录
 class Record < ActiveRecord::Base
 
   belongs_to :user
-  belongs_to :award
   #********全部字段
-
+  # award 1,2,3,4,5,6
   #********全部字段
 
 

@@ -11,9 +11,20 @@ class User < ActiveRecord::Base
   # :city
   # :country
   # :headimgurl
-  # today_gua_count
+  # :today_gua_count
   # :last_get_time
-  # hy_count
+  # :hy_count 好友数量
+  # :hy_is_award  50个好友是否已经兑换
+  # :award_1
+  # :award_2
+  # :award_3
+  # :award_4
+  # :award_5
+  # :award_6
+
+  # :mobile
+  # :go_4
+  # :go_5
   #********全部字段
 
 
@@ -30,11 +41,6 @@ class User < ActiveRecord::Base
   
   def sex_name
     sex == 1 ? '男' : '女'
-  end
-
-
-  def email_required
-    email.present?
   end
 
 

@@ -24,7 +24,11 @@ class CreateUser < ActiveRecord::Migration
 
       t.string  :name, comment: '姓名'
       t.string  :address, comment: '地址'
+      t.string  :mobile
+      t.boolean :go_4, default: false
+      t.boolean :go_5, default: false
       t.integer :hy_count, default: 0, comment: '累计获得的好友'
+      t.boolean :hy_is_award, default: false, comment: '50个好友是否已经兑换'
 
       t.timestamps
     end

@@ -1,22 +1,249 @@
-<body style="margin:0px;background-color:#6ecbb9;text-align:center;">
+<style type="text/css">
+    .page{
+        position: relative;
+        width: 100%;
+        max-width: 640px;
+        min-width: 320px;
+    }
 
-<table width="100%" cellpadding="0" cellspacing="0">
-  <tr>
-    <td align="center" valign="top">
-      <img src="<%= asset_path("3bg.jpg") %>" border="0"/>
-    </td>
-  </tr>
-</table>
-<!--div id="screen" style="width:100%;height:100%;position:absolute;z-index:10;top:0;left:0;padding-top:120%;"-->
+    .bgImg{
+        display: inline-block;
+        max-width: 100%;
+        width: 100%;
+    }
 
-<div id="btn" style="width:100%;height:195px;position:absolute;top:433px;margin-left:auto;margin-right:auto;z-index:10;">
-  <center>
-    <div style="width:186px;height:195px;font-size:100px;font-family:arial;font-weight:bold;color:#996c33;text-align:center;line-height:195px;">
-      <span id="count" ><%= @count %></span>
+    .btn1{
+        position: absolute;
+        top: 78%;
+        left: 50%;
+        width: 64%;
+        margin-left: -32%;
+    }
+
+    .friendCount{
+        position: absolute;
+        top: 42%;
+        color: #996c33;
+        font-family: arial;
+        font-size: 100px;
+        font-weight: bold;
+        height: 10%;
+        width: 100%;
+        text-align:center;
+    }
+
+    @media screen and (max-width: 480px){
+        .friendCount{
+            font-size:50px;
+        }
+    }
+
+    .mask{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1d1c1c;
+        opacity: 0.3;
+        z-index: 100;
+    }
+
+    .contact{
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        width: 60%;
+        margin-left: -30%;
+        background: none repeat scroll 0 0 #fff;
+        height: 38%;
+        z-index: 200;
+        font-size: 29px;
+    }
+
+    @media screen and (max-width: 480px){
+        .contact{
+            font-size:15px;
+        }
+    }
+
+    .contactTop{
+        padding: 5%;
+        background-color: #d0a972;
+    }
+
+    .contactTop span{
+        display: block;
+        text-align: left;
+        font-weight: bold;
+        color: #fff;
+        line-height: 125%;
+    }
+
+    .contactInfo{
+        margin-top: 15px;
+        height: 45%;
+    }
+
+    li{
+        display: block;
+        width: 100%;
+        height: 26%;
+        font-weight: bold;
+        margin-bottom: 4%;
+    }
+
+    li span{
+        display: inline-block;
+        width: 28%;
+        text-align: center;
+    }
+
+    input[type='text']{
+        display: inline-block;
+        height: 100%;
+        width: 65%;
+        border: none;
+        background-color: #dcdcdc;
+    }
+
+    input[type='text']:focus{
+        outline: none;
+    }
+
+    .confirmBtn{
+        margin-top: 15px;
+        width: 40%;
+        position: absolute;
+        top: 75%;
+        left: 50%;
+        margin-left: -20%;
+    }
+
+    .displayNone{
+        display: none;
+    }
+
+    .notEnough, .enough{
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        width: 70%;
+        margin-left: -35%;
+        background: #fff;
+        z-index: 200;
+    }
+
+    .notEnough img, .enough img{
+        width: 100%;
+    }
+
+    img.confirmBtn1, img.confirmBtn2{;
+        width: 30%;
+        position: absolute;
+        margin-left: -15%;
+        top: 75%;
+        left: 50%;
+    }
+</style>
+
+<body style="margin:0;background-color:#6ecbb9;" >
+<div id="page" class="page">
+  <div id="mask" class="mask displayNone"></div>
+
+  <img class="bgImg" src="<%= asset_path("3bg.jpg") %>" border="0"/>
+  <div id="friendCount" class="friendCount"><%= @count %></div>
+  <% if @can_award %>
+      <img class="btn1" src="<%= asset_path("3btn1.png") %>" onclick='exchange();'>
+  <% end %>
+
+  <div id="notEnough" class="notEnough displayNone">
+    <img src="<%= asset_path("4btn1.png") %>" border="0"/>
+    <img class="confirmBtn1" src="<%= asset_path("confirmBtn.png") %>" border="0" onclick="confirmBtn()"/>
+  </div>
+  <div id="enough" class="enough displayNone">
+    <img src="<%= asset_path("5btn2.png") %>" border="0"/>
+    <img class="confirmBtn2" src="<%= asset_path("5btn1.png") %>" border="0" onclick="exchange2()"/>
+  </div>
+  <div id="contact" class="contact displayNone">
+    <div class="contactTop">
+      <span>请填写您的联系方式，以便我们通知您尽快领奖。</span>
     </div>
-    <img src="<%= asset_path("3btn1.png") %>" border="0" style="margin-top:230px;" onclick="javascript:window.location.href='4.html';">
-  </center>
+    <div class="contactInfo">
+      <li><span>微信名</span><input type="text" id="contact_weixin"></li>
+      <li><span>姓名</span><input type="text" id="contact_name"></li>
+      <li><span>手机</span><input type="text" id="contact_mobile"></li>
+    </div>
+    <img class="confirmBtn" src="<%= asset_path("confirmBtn.png") %>" border="0"
+         onclick="duihuan();"/>
+  </div>
 </div>
-
-<!--/div-->
 </body>
+
+<script type="text/javascript">
+
+
+    function duihuan() {
+
+        var contact_weixin = $('#contact_weixin').val();
+        if (contact_weixin == '') {
+            alert('微信名不能为空');
+            return false;
+        }
+
+        var contact_name = $('#contact_name').val();
+        if (contact_name == '') {
+            alert('姓名不能为空');
+            return false;
+        }
+
+        var contact_mobile = $('#contact_mobile').val();
+        if (contact_mobile == '') {
+            alert('手机号不能为空');
+            return false;
+        }
+
+        $.ajax({
+            url: '/duihuan',
+            type: 'post',
+            dataType: 'json',
+            data: {is_hy: true, openid: "<%= @openid%>",
+                weixin_name: contact_weixin, name: contact_name, mobile: contact_mobile},
+
+            success: function (data) {
+
+                document.getElementById('contact').style.display = 'none';
+                document.getElementById('mask').style.display = 'none';
+                if(data.status != 1){
+                    alert(data.msg);
+                }else{
+                    alert('兑换成功');
+                }
+
+            }
+        });
+
+
+    }
+
+    function exchange(){
+        document.getElementById('mask').style.display = 'block';
+        var friendCount = document.getElementById('friendCount').innerHTML;
+        friendCount = parseInt(friendCount);
+        if(friendCount >= 50){
+            document.getElementById('enough').style.display='block';
+        }else{
+            document.getElementById('notEnough').style.display='block';
+        }
+    }
+
+    function exchange2(){
+        document.getElementById('enough').style.display = 'none';
+        document.getElementById('contact').style.display='block';
+    }
+
+    function confirmBtn(){
+        document.getElementById('mask').style.display = 'none';
+        document.getElementById('notEnough').style.display='none';
+    }
+</script>

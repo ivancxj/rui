@@ -11,13 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140910150149) do
+ActiveRecord::Schema.define(version: 20140915150156) do
+
+  create_table "award_records", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "award_id"
+    t.string   "weixin_name"
+    t.string   "name"
+    t.string   "mobile"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "award_records", ["user_id"], name: "index_award_records_on_user_id"
 
   create_table "awards", force: true do |t|
     t.integer "award_type", default: 1
     t.string  "name"
-    t.string  "img"
+    t.integer "count"
   end
+
+  add_index "awards", ["award_type"], name: "index_awards_on_award_type"
 
   create_table "friends", force: true do |t|
     t.integer  "user_id"
@@ -25,9 +39,11 @@ ActiveRecord::Schema.define(version: 20140910150149) do
     t.datetime "created_at"
   end
 
+  add_index "friends", ["user_id"], name: "index_friends_on_user_id"
+
   create_table "records", force: true do |t|
     t.integer  "user_id"
-    t.integer  "award_id"
+    t.integer  "award",      default: 0
     t.datetime "created_at"
   end
 
@@ -58,7 +74,11 @@ ActiveRecord::Schema.define(version: 20140910150149) do
     t.integer  "award_6",         default: 0
     t.string   "name"
     t.string   "address"
+    t.string   "mobile"
+    t.boolean  "go_4",            default: false
+    t.boolean  "go_5",            default: false
     t.integer  "hy_count",        default: 0
+    t.boolean  "hy_is_award",     default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

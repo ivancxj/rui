@@ -7,5 +7,7 @@ class CreateFriend < ActiveRecord::Migration
 
       t.datetime :created_at
     end
+
+    add_index :friends, :user_id
   end
 end

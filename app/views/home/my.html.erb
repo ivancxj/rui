@@ -1,10 +1,278 @@
-<body style="margin:0px;background-color:#6ecbb9;text-align:center;" >
-<table width="100%" cellpadding="0" cellspacing="0">
-  <tr><td align="center" valign="top" style="position:relative">
-    <img src="<%= asset_path('11bg.jpg') %>" border="0" usemap="#map1"/>
-    <map name="map1">
-      <area title="继续收集元素" href="javascript:history.go(-1)" coords="133,770,516,844" shape="rect">
-      <area title="立即兑换" href="javascript:window.location.href='12.html'" coords="134,884,516,958" shape="rect">
-    </map>
-  </td></tr>
-</table>
+<style type="text/css">
+    .btn1, .btn2, .btn3, .btn4, .btn5, .btn6{
+        background-color: #6ecbb9;
+        color: #fff;
+        font-size: 34px;
+        font-weight: bold;
+        height: 4%;
+        left: 11%;
+        position: absolute;
+        top: 44%;
+        width: 18%;
+    }
+
+    @media screen and (max-width: 480px){
+        .btn1, .btn2, .btn3, .btn4, .btn5, .btn6{
+            font-size:18px;
+        }
+    }
+
+    .btn2{
+        left: 42%;
+        top: 44%;
+    }
+
+    .btn3{
+        left: 73%;
+        top: 44%;
+    }
+
+    .btn4{
+        left: 11%;
+        top: 62%;
+    }
+
+    .btn5{
+        left: 42%;
+        top: 62%;
+    }
+
+    .btn6{
+        left: 73%;
+        top: 62%;
+    }
+
+    .page{
+        position: relative;
+        width: 100%;
+        max-width: 640px;
+        min-width: 320px;
+    }
+
+    .bgImg{
+        display: inline-block;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .mask{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1d1c1c;
+        opacity: 0.3;
+        z-index: 100;
+    }
+
+    .contact{
+        background: none repeat scroll 0 0 #fff;
+        font-size: 29px;
+        height: 38%;
+        left: 50%;
+        margin-left: -29%;
+        margin-top: -19%;
+        position: absolute;
+        text-align: left;
+        top: 50%;
+        width: 60%;
+        z-index: 200;
+    }
+
+    @media screen and (max-width: 480px){
+        .contact{
+            font-size:15px;
+        }
+    }
+
+    .contactTop{
+        padding: 5%;
+        background-color: #d0a972;
+    }
+
+    .contactTop span{
+        display: block;
+        font-weight: bold;
+        color: #fff;
+        line-height: 125%;
+    }
+
+    .contactInfo{
+        margin-top: 15px;
+        height: 45%;
+    }
+
+    li{
+        display: block;
+        width: 100%;
+        height: 26%;
+        font-weight: bold;
+        margin-bottom: 4%;
+    }
+
+    li span{
+        display: inline-block;
+        width: 28%;
+        text-align: center;
+    }
+
+    input[type='text']{
+        display: inline-block;
+        height: 100%;
+        width: 65%;
+        border: none;
+        background-color: #dcdcdc;
+    }
+
+    input[type='text']:focus{
+        outline: none;
+    }
+
+    .confirmBtn{
+        margin-top: 15px;
+        width: 40%;
+        position: absolute;
+        top: 75%;
+        left: 50%;
+        margin-left: -20%;
+    }
+
+    .displayNone{
+        display: none;
+    }
+
+    .notEnough{
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        width: 70%;
+        margin-left: -35%;
+        background: #fff;
+        z-index: 200;
+    }
+
+    .notEnough img{
+        width: 100%;
+    }
+
+    img.confirmBtn1{
+        width: 30%;
+        position: absolute;
+        margin-left: -15%;
+        top: 75%;
+        left: 50%;
+    }
+
+</style>
+
+<body style="margin:0;background-color:#6ecbb9;text-align:center;" >
+<div id="page" class="page">
+  <div id="mask" class="mask displayNone"></div>
+
+  <img class="bgImg" src="<%= asset_path('11bg.jpg') %>" border="0" usemap="#map1"/>
+  <map name="map1">
+    <area title="继续收集元素" href="javascript:history.go(-1)" coords="133,770,516,844" shape="rect">
+    <area title="立即兑换" onclick='exchange();' coords="134,884,516,958" shape="rect">
+  </map>
+  <div class="btn1"><span>X</span><sapn class="count"><%= @award_1 %></sapn></div>
+  <div class="btn2"><span>X</span><sapn class="count"><%= @award_2 %></sapn></div>
+  <div class="btn3"><span>X</span><sapn class="count"><%= @award_3 %></sapn></div>
+  <div class="btn4"><span>X</span><sapn class="count"><%= @award_4 %></sapn></div>
+  <div class="btn5"><span>X</span><sapn class="count"><%= @award_5 %></sapn></div>
+  <div class="btn6"><span>X</span><sapn class="count"><%= @award_6 %></sapn></div>
+  <div id="notEnough" class="notEnough displayNone">
+    <img src=" <%= asset_path('12btn1.png') %>" border="0"/>
+    <img class="confirmBtn1" src="<%= asset_path('confirmBtn.png') %>" border="0" onclick="confirmBtn()"/>
+  </div>
+  <div id="contact" class="contact displayNone">
+    <div class="contactTop">
+      <span>请填写您的联系方式，以便我们通知您尽快领奖。</span>
+    </div>
+    <div class="contactInfo">
+      <li><span>微信名</span><input type="text" id="contact_weixin"></li>
+      <li><span>姓名</span><input type="text" id="contact_name"></li>
+      <li><span>手机</span><input type="text" id="contact_mobile"></li>
+    </div>
+    <img class="confirmBtn" src="<%= asset_path("confirmBtn.png") %>" border="0"
+         onclick="duihuan();"/>
+  </div>
+</div>
+</body>
+
+<script type="text/javascript">
+
+    function duihuan() {
+
+        var contact_weixin = $('#contact_weixin').val();
+        if (contact_weixin == '') {
+            alert('微信名不能为空');
+            return false;
+        }
+
+        var contact_name = $('#contact_name').val();
+        if (contact_name == '') {
+            alert('姓名不能为空');
+            return false;
+        }
+
+        var contact_mobile = $('#contact_mobile').val();
+        if (contact_mobile == '') {
+            alert('手机号不能为空');
+            return false;
+        }
+
+
+        $.ajax({
+            url: '/duihuan',
+            type: 'post',
+            dataType: 'json',
+            data: {is_hy: false, openid: "<%= @openid%>",
+                weixin_name: contact_weixin, name: contact_name, mobile: contact_mobile},
+
+            success: function (data) {
+
+                document.getElementById('contact').style.display = 'none';
+                document.getElementById('mask').style.display = 'none';
+                if(data.status != 1){
+                    alert(data.msg);
+                }
+
+            }
+        });
+
+
+    }
+
+    function adaptScreen(){
+        var _width = document.getElementById('page').offsetWidth;
+        var rW = _width/640;
+        var areaLendth = document.getElementsByTagName('area').length;
+        for(var k=0;k<areaLendth;k++){
+            var coords=document.getElementsByTagName('area')[k].getAttribute('coords');
+            var arrCoords=coords.split(',');
+            for(var i=0;i<arrCoords.length;i++){
+                arrCoords[i]=i%2==0?parseInt(arrCoords[i]*rW):parseInt(arrCoords[i]*rW);
+            }
+            document.getElementsByTagName('area')[k].setAttribute('coords',arrCoords.join(','));
+        }
+    }
+
+    adaptScreen();
+
+    //mockup data
+    function exchange(){
+        var elementCount = 4;
+        document.getElementById('mask').style.display = 'block';
+        if(elementCount > 3){
+            document.getElementById('contact').style.display='block';
+        }else{
+            document.getElementById('notEnough').style.display='block';
+        }
+    }
+
+    function confirmBtn(){
+        document.getElementById('mask').style.display = 'none';
+        document.getElementById('notEnough').style.display='none';
+    }
+</script>

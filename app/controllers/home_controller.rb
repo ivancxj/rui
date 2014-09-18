@@ -1,7 +1,7 @@
 #encoding: utf-8
 class HomeController < ApplicationController
-  skip_before_filter :controller_authorize
-
+  # skip_before_filter :controller_authorize
+  skip_before_filter :verify_authenticity_token
   
   before_filter {
     
@@ -80,7 +80,7 @@ class HomeController < ApplicationController
     mid = params[:mid]
     # 用户分享过来的
     if mid.present?
-      share_user = User.where(id: mid).first
+      share_user = User.where(openid: mid).first
       if share_user.present?
 
         opt = {}
@@ -114,10 +114,10 @@ class HomeController < ApplicationController
 
     # 默认次数
     @gua_count = user.today_gua_count
-    @user_id = user.id
 
     # @openid = 'ozmMMt8Irb8htU_jlRVX3Ekkzov8'
-    # @gua_count = 2
+    # user = User.where(openid: @openid).first
+    # @gua_count = user.today_gua_count
   end
 
 
@@ -126,31 +126,15 @@ class HomeController < ApplicationController
     openid = params[:openid]
     user = User.where(openid: openid).first
     # @today_gua_count = 0
-    r = rand(1..6)
-    if user.present?
 
+    if user.present?
       # 隔天
       if user.last_get_time < Time.now.beginning_of_day
-        user.today_gua_count = Setting.every_day_gua - 1
-        user.last_get_time = Time.now
-        if(r == 1)
-          user.award_1 = user.award_1 + 1
-        elsif(r == 2)
-          user.award_2 = user.award_2 + 1
-        elsif(r == 3)
-          user.award_3 = user.award_3 + 1
-        elsif(r == 4)
-          user.award_4 = user.award_4 + 1
-        elsif(r == 5)
-          user.award_5 = user.award_5 + 1
-        elsif(r == 6)
-          user.award_6 = user.award_6 + 1
-        end
 
-        user.save
-      else
-        if user.today_gua_count > 0
-          user.today_gua_count = user.today_gua_count - 1
+        r = get_rank(user)
+
+        if r > 0
+          user.today_gua_count = user.today_gua_count + Setting.every_day_gua - 1
           user.last_get_time = Time.now
           if(r == 1)
             user.award_1 = user.award_1 + 1
@@ -165,7 +149,33 @@ class HomeController < ApplicationController
           elsif(r == 6)
             user.award_6 = user.award_6 + 1
           end
+
           user.save
+        end
+
+      else
+        if user.today_gua_count > 0
+
+          r = get_rank(user)
+
+          if r > 0
+            user.today_gua_count = user.today_gua_count - 1
+            user.last_get_time = Time.now
+            if(r == 1)
+              user.award_1 = user.award_1 + 1
+            elsif(r == 2)
+              user.award_2 = user.award_2 + 1
+            elsif(r == 3)
+              user.award_3 = user.award_3 + 1
+            elsif(r == 4)
+              user.award_4 = user.award_4 + 1
+            elsif(r == 5)
+              user.award_5 = user.award_5 + 1
+            elsif(r == 6)
+              user.award_6 = user.award_6 + 1
+            end
+            user.save
+          end
 
         else
           render json: {:gua_count => -1}
@@ -173,7 +183,37 @@ class HomeController < ApplicationController
         end
       end
 
-      render json: {:gua_count => user.today_gua_count, :award => r}
+      array = []
+      array << 1 if user.award_1 > 0
+      array << 2 if user.award_2 > 0
+      array << 3 if user.award_3 > 0
+      array << 4 if user.award_4 > 0
+      array << 5 if user.award_5 > 0
+      array << 6 if user.award_6 > 0
+
+      element_count = array.length
+      p "element_count数=#{element_count}"
+      can_award = false
+      if element_count == 4
+        unless user.go_4
+          award = Award.where(award_type: 1).first
+          can_award = true if award.count > 0
+        end
+
+      elsif element_count == 5
+        unless user.go_5
+          award = Award.where(award_type: 2).first
+          can_award = true if award.count > 0
+        end
+      else
+        award = Award.where(award_type: 3).first
+        can_award = true if award.count > 0
+      end
+
+      #  如果不能兑奖, 则返回 -1
+      element_count = -1 unless can_award
+
+      render json: {:gua_count => user.today_gua_count, :award => r, element_count: element_count}
     else
       render json: {:gua_count => -1}
     end
@@ -183,8 +223,7 @@ class HomeController < ApplicationController
   end
 
   def my
-    openid = params[:openid]
-    @count = 0
+    @openid = params[:openid]
 
     @award_1 = 0
     @award_2 = 0
@@ -192,15 +231,18 @@ class HomeController < ApplicationController
     @award_4 = 0
     @award_5 = 0
     @award_6 = 0
-    if openid
-      u = User.where(openid: openid).first
-      @count = u.hy_count if u.present?
-      @award_1 = u.award_1
-      @award_2 = u.award_2
-      @award_3 = u.award_3
-      @award_4 = u.award_4
-      @award_5 = u.award_5
-      @award_6 = u.award_6
+    if @openid.present?
+      u = User.where(openid: @openid).first
+     if u.present?
+       @award_1 = u.award_1
+       @award_2 = u.award_2
+       @award_3 = u.award_3
+       @award_4 = u.award_4
+       @award_5 = u.award_5
+       @award_6 = u.award_6
+     end
+
+
 
     end
   end
@@ -208,11 +250,29 @@ class HomeController < ApplicationController
   # 助阵好友列表
   def friend
 
-    openid = params[:openid]
+    @openid = params[:openid]
     @count = 0
-    if openid.present?
-      u = User.where(openid: openid).first
-      @count = u.hy_count if u.present?
+    @can_award = true
+
+    if @openid.present?
+      u = User.where(openid: @openid).first
+      if u.present?
+        @count = u.hy_count
+
+        if AwardRecord.exists?(user_id: u.id, award_id: 4)
+          @can_award = false
+        else
+
+          if u.hy_count >= 50# 好友数大于50
+            award = Award.where(award_type: 4).first
+            if award.count <= 0
+              @can_award = false
+            end
+          end
+
+        end
+
+      end
     end
 
   end
@@ -224,6 +284,166 @@ class HomeController < ApplicationController
 
   # 获奖名单
   def mingdan
+    @award_records = AwardRecord.includes(:award).order(id: :desc).all
+  end
+
+  # 兑换奖品
+  def duihuan
+    openid = params[:openid]
+    weixin_name = params[:weixin_name]
+    name = params[:name]
+    mobile = params[:mobile]
+    element_count = params[:element_count]
+    if element_count.present?
+      element_count = element_count.to_i
+    else
+      element_count = 0
+    end
+
+    is_hy = params[:is_hy]
+
+    if openid.present?
+      u = User.where(openid: openid).first
+      if u.present?
+
+        array = []
+        array << 1 if u.award_1 > 0
+        array << 2 if u.award_2 > 0
+        array << 3 if u.award_3 > 0
+        array << 4 if u.award_4 > 0
+        array << 5 if u.award_5 > 0
+        array << 6 if u.award_6 > 0
+
+        length = array.length
+
+        if is_hy == 'true'
+          if u.hy_count >= 50
+            award = Award.where(award_type: 4).first
+            if award.present? and award.count > 0
+              if AwardRecord.exists?(user_id: u.id, award_id: award.id)
+                return render json: {:status => -1, msg: '您已经兑过了,不能再兑换'}
+              else
+                opt = {}
+                opt[:user_id] = u.id
+                opt[:award_id] = award.id
+                opt[:weixin_name] = weixin_name
+                opt[:name] = name
+                opt[:mobile] = mobile
+
+                ar = AwardRecord.new(opt)
+                ar.save
+
+                award.count = award.count - 1
+                award.save
+
+
+                return render json: {:status => 1}
+              end
+            else
+              return render json: {:status => -1, msg: '奖品已经被兑完了'}
+            end
+
+          else
+            return render json: {:status => -1, msg: '获得50个好友才可以兑换'}
+          end
+
+        else
+
+
+          if length >= 4
+            element_count = length if element_count == 0
+
+            if element_count == 4
+              if u.go_4
+                return render json: {:status => -1, msg: '您选择了继续刮奖,集齐5个才可以兑奖'}
+              end
+            elsif element_count == 5
+              if u.go_5
+                return render json: {:status => -1, msg: '您选择了继续刮奖,集齐6个才可以兑奖'}
+              end
+            end
+
+
+
+            array = array[0..element_count-1]
+            array.each do |i|
+              # 数量-1
+              case i
+                when 1
+                  u.award_1 = (u.award_1) -1
+                when 2
+                  u.award_2 = (u.award_2) -1
+                when 3
+                  u.award_3 = (u.award_3) -1
+                when 4
+                  u.award_4 = (u.award_4) -1
+                when 5
+                  u.award_5 = (u.award_5) -1
+                when 6
+                  u.award_6 = (u.award_6) -1
+              end
+            end
+
+            u.save
+
+            award = Award.where(award_type: element_count - 3).first
+            if award.present? and award.count > 0
+              opt = {}
+              opt[:user_id] = u.id
+              opt[:award_id] = award.id
+              opt[:weixin_name] = weixin_name
+              opt[:name] = name
+              opt[:mobile] = mobile
+
+              ar = AwardRecord.new(opt)
+              ar.save
+
+              award.count = award.count - 1
+              award.save
+
+              render json: {:status => 1}
+
+            else
+
+              render json: {:status => -1, msg: '奖品已经被兑完了'}
+            end
+          else
+            render json: {:status => -1, msg: '卡片起码4张才可以兑奖'}
+          end
+
+
+        end
+      else
+
+        render json: {:status => -1, msg: '无效用户'}
+      end
+    else
+      render json: {:status => -1, msg: '无效用户'}
+
+    end
+
+
+
+  end
+
+  # 继续刮奖
+  def go_gua
+    openid = params[:openid]
+    element_count = params[:element_count]
+
+    if openid.present?
+      u = User.where(openid: openid).first
+      if u.present?
+        if element_count.to_i == 4
+          u.go_4 = true
+        elsif element_count.to_i == 5
+          u.go_5 = true
+        end
+        u.save if u.changed?
+      end
+    end
+
+    render json: {:status => 1}
 
   end
 
