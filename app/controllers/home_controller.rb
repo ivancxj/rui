@@ -79,7 +79,7 @@ class HomeController < ApplicationController
 
     mid = params[:mid]
     # 用户分享过来的
-    if mid.present?
+    if mid.present? and mid != @openid
       share_user = User.where(openid: mid).first
       if share_user.present?
 
